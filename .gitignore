@@ -12,6 +12,7 @@
 .idea/
 requirements.txt
 src/features/test.py
+*.csv
 # Generated files
 .idea/**/contentModel.xml
 

@@ -1,41 +1,79 @@
-import pandas as pd
+import os
+import kaggle
+import zipfile
 import requests
-# import json
+import pandas as pd
 
 
-def get_subways()->pd.DataFrame:
+def get_all(path: str) -> pd.DataFrame:
     """
-    Функция для формирования DataFrame с данными о метро СПб
-    :param:
-    :return: df_subways:
+    Function load data from Kaggle and create pd.DataFrame
+    :param path:
+    :return:
     """
+    kaggle.api.authenticate()
+    name = "russia-real-estate-20182021"
+    if os.path.isfile(f"{path}/raw/all_v2.csv"):
+        print(f"You already have the full dataset!")
+        df_spb = pd.read_csv(f"{path}/raw/df_spb")
+        print(df_spb.head(5))
+    else:
+        kaggle.api.dataset_download_file(
+            f"mrdaniilak/{name}",
+            file_name="all_v2.csv",
+            path=path,
+        )
+        print(f"Downloading dataset : {name}!")
 
-    overpass_url = "https://maps.mail.ru/osm/tools/overpass/api//interpreter"
-    overpass_query = """ 
-    [out:json];
-    area["ISO3166-2"="RU-SPE"][admin_level=4];
-    (node["station"="subway"](area);
-     way["station"="subway"](area);
-     rel["station"="subway"](area);
-    );
-    out center;
+        with zipfile.ZipFile(f"{path}/raw/all_v2.csv.zip", "r") as zip_ref:
+            zip_ref.extractall(f"{path}/raw")
+        os.remove(f"{path}/raw/all_v2.csv.zip")
+
+    df = pd.read_csv(f"{path}/raw/all_v2.csv")
+    df_spb = df[df["region"] == 2661]
+    df_spb.to_csv(f"{path}/df_spb")
+    return df_spb
+
+
+def get_subways(path: str) -> pd.DataFrame:
     """
-    response = requests.get(overpass_url,
-                            params={'data': overpass_query})
-    data = response.json()
+    Function create a DataFrame with metro stations' data
+    :param path:
+    :return:
+    """
+    if os.path.isfile(f"{path}/external/spb_subways"):
+        print(f"You already have the spb_subways dataset!")
+        df_subway = pd.read_csv(f"{path}/external/spb_subways")
+        print(df_subway.head(5))
 
-    df_subways = pd.DataFrame(columns=['StationName', 'lat', 'lon'])
+    else:
+        overpass_url = "https://maps.mail.ru/osm/tools/overpass/api//interpreter"
+        overpass_query = """ 
+        [out:json];
+        area["ISO3166-2"="RU-SPE"][admin_level=4];
+        (node["station"="subway"](area);
+         way["station"="subway"](area);
+         rel["station"="subway"](area);
+        );
+        out center;
+        """
+        response = requests.get(overpass_url, params={"data": overpass_query})
+        data = response.json()
 
-    for i, element in enumerate(data['elements']):
+        df_subway = pd.DataFrame(columns=["StationName", "lat", "lon"])
 
-        if element['type'] == 'node':
+        for i, element in enumerate(data["elements"]):
 
-            data = {'StationName': [element['tags']['name']],
-                    'lat': [element['lat']],
-                    'lon': [element['lon']]}
+            if element["type"] == "node":
 
-            df_subways = pd.concat([df_subways, pd.DataFrame(data=data)],
-                                   axis=0,
-                                   ignore_index=True)
+                data = {
+                    "StationName": [element["tags"]["name"]],
+                    "lat": [element["lat"]],
+                    "lon": [element["lon"]],
+                }
 
-    return df_subways
+                df_subway = pd.concat(
+                    [df_subway, pd.DataFrame(data=data)], axis=0, ignore_index=True
+                )
+        df_subway.to_csv(f"{path}/external/spb_subways", index=False)
+        return df_subway

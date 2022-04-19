@@ -1,11 +1,14 @@
-import numpy as np
+import os
 import sys
+import numpy as np
 from time import sleep
 
 import pandas as pd
 
 
-def dist_calc(lat1: float, lon1: float, lat2:float, lon2:float, r_earth=6371.009e3)->float:
+def dist_calc(
+    lat1: float, lon1: float, lat2: float, lon2: float, r_earth=6371.009e3
+) -> float:
     """
     Функция для расчета расстояниz между
     двумя географическими координатами
@@ -24,7 +27,7 @@ def dist_calc(lat1: float, lon1: float, lat2:float, lon2:float, r_earth=6371.009
     delta_x = np.cos(lat2) * np.cos(lon2) - np.cos(lat1) * np.cos(lon1)
     delta_y = np.cos(lat2) * np.sin(lon2) - np.cos(lat1) * np.sin(lon1)
     delta_z = np.sin(lat2) - np.sin(lat1)
-    c = np.sqrt(delta_x ** 2 + delta_y ** 2 + delta_z ** 2)
+    c = np.sqrt(delta_x**2 + delta_y**2 + delta_z**2)
     delta_sigma = 2 * np.arcsin(c / 2)
 
     distance = delta_sigma * r_earth
@@ -32,8 +35,9 @@ def dist_calc(lat1: float, lon1: float, lat2:float, lon2:float, r_earth=6371.009
     return distance
 
 
-def nearest_node(lat: float, lon: float, df_geo: pd.DataFrame, point_lat='lat'
-                 , point_lon='lon')->pd.core.series.Series:
+def nearest_node(
+    lat: float, lon: float, df_geo: pd.DataFrame, point_lat="lat", point_lon="lon"
+) -> pd.core.series.Series:
     """
     Функция поиска ближайшей к указанной точке (lat, lon)
     координаты из набора координат в df_geo
@@ -49,15 +53,17 @@ def nearest_node(lat: float, lon: float, df_geo: pd.DataFrame, point_lat='lat'
     """
     df = df_geo.copy()
 
-    df['distance'] = [dist_calc(lat, lon, df_lat, df_lon) for df_lat, df_lon in
-                      zip(df[point_lat], df[point_lon])]
+    df["distance"] = [
+        dist_calc(lat, lon, df_lat, df_lon)
+        for df_lat, df_lon in zip(df[point_lat], df[point_lon])
+    ]
 
-    df.sort_values(['distance'], ignore_index=True, inplace=True)
+    df.sort_values(["distance"], ignore_index=True, inplace=True)
 
     return df.loc[0]
 
 
-def subway_feature(data: pd.DataFrame, subway: pd.DataFrame)->pd.DataFrame:
+def subway_feature(data: pd.DataFrame, subway: pd.DataFrame) -> pd.DataFrame:
     """
     Функция для добавления новых характеристик, связанных с метро
     (наименование ближайшей станции, расстояние до ближайшей станции)
@@ -68,24 +74,31 @@ def subway_feature(data: pd.DataFrame, subway: pd.DataFrame)->pd.DataFrame:
                        "SubwayDistance"
     """
 
-    new_data = data.copy()
+    if os.path.isfile("../../data/interim/spb_house_with_subway"):
+        print(f"You have already created subway features")
+        df_spb_subway = pd.read_csv("../../data/interim/spb_house_with_subway")
+        print(df_spb_subway.head(5))
+    else:
+        df_spb_subway = data.copy()
 
-    stations_array = ['' for _ in range(len(new_data))]
-    distance_array = np.zeros(len(new_data))
-    for i in range(len(new_data)):
-        df_near_sub = nearest_node(lat=data['geo_lat'][i], lon=data['geo_lon'][i],
-                                   df_geo=subway)
-        stations_array[i] = df_near_sub['StationName']
-        distance_array[i] = df_near_sub['distance']
+        stations_array = ["" for _ in range(len(df_spb_subway))]
+        distance_array = np.zeros(len(df_spb_subway))
+        for i in range(len(df_spb_subway)):
+            df_near_sub = nearest_node(
+                lat=data["geo_lat"][i], lon=data["geo_lon"][i], df_geo=subway
+            )
+            stations_array[i] = df_near_sub["StationName"]
+            distance_array[i] = df_near_sub["distance"]
 
+            # отображение прогресса расчетов
+            sys.stdout.write("\r")
+            sys.stdout.write("%d%%" % (100 * i / len(df_spb_subway)))
+            sys.stdout.flush()
+            sleep(0.0001)
 
-        # отображение прогресса расчетов
-        sys.stdout.write('\r')
-        sys.stdout.write("%d%%" % (100 * i/len(new_data)))
-        sys.stdout.flush()
-        sleep(0.0001)
+        df_spb_subway["StationName"] = stations_array
+        df_spb_subway["SubwayDistance"] = distance_array
 
-    new_data['StationName'] = stations_array
-    new_data['SubwayDistance'] = distance_array
+        df_spb_subway.to_csv("../../data/interim/spb_house_with_subway", index=False)
 
-    return new_data
+    return df_spb_subway
