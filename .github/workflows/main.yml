@@ -26,4 +26,4 @@ jobs:
           
       - name: Check syntax
         # Stop the build if there are Python syntax errors or undefined names
-        run: flake8 --max-line-length=80 --ignore=E401 exclude = "test_environment.py"
+        run: flake8 --max-line-length=80 --ignore=E401 --exclude ['test_environment.py', 'docs']
