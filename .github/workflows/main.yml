@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8"]
         
     
     steps:
@@ -27,6 +27,3 @@ jobs:
       - name: Check syntax
         # Stop the build if there are Python syntax errors or undefined names
         run: flake8 --count --statistics --show-source
-
-      - name: Warnings
-        run: flake8 . --count --exit-zero --max-complexity=10 --max-line-length=80 --statistics --extend-exclude=""
