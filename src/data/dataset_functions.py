@@ -2,12 +2,13 @@ import pandas as pd
 import requests
 # import json
 
+
 def get_subways():
-    '''
+    """
     Функция для формирования DataFrame с данными о метро СПб
     :param:
     :return: df_subways:
-    '''
+    """
 
     overpass_url = "https://maps.mail.ru/osm/tools/overpass/api//interpreter"
     overpass_query = """ 

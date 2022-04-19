@@ -1,15 +1,17 @@
 import numpy as np
-import pandas as pd
+import sys
+from time import sleep
+
 
 def dist_calc(lat1, lon1, lat2, lon2, r_earth=6371.009e3):
     """
     Функция для расчета расстояниz между
     двумя географическими координатами
     :param lat1:
-           lon1: координаты в градусах первой точки;
-           lat2:
-           lon2: координаты в градусах первой точки;
-           r_earth: радиус Земли.
+    :param lon1: координаты в градусах первой точки;
+    :param lat2:
+    :param lon2: координаты в градусах первой точки;
+    :param r_earth: радиус Земли.
     :return: растояние между двумя точками, м.
     """
     lat1 *= np.pi / 180
@@ -28,23 +30,21 @@ def dist_calc(lat1, lon1, lat2, lon2, r_earth=6371.009e3):
     return distance
 
 
-def nearest_node(lat, lon, df_geo, point_name, point_lat='lat', point_lon='lon'):
-    '''
+def nearest_node(lat, lon, df_geo, point_lat='lat', point_lon='lon'):
+    """
     Функция поиска ближайшей к указанной точке (lat, lon)
     координаты из набора координат в df_geo
     :param lat:
-           lon: координаты  точки в градусах;
-           df_geo: DataFrame с проименованными координатными точками;
-           name: наименование столбца в df_geo, содержащего названия точек;
-           point_lat, point_lon: наименование столбцов в df_geo, содержащих координаты
-                                 точек.
+    :param lon: координаты  точки в градусах;
+    :param df_geo: DataFrame с проименованными координатными точками;
+    :param point_lat: наименование столбцов в df_geo, содержащих координаты
+    :param point_lon: точек.
+
     :return: DataFrame со столбцами: 'name', 'lat', 'lon', 'distance',
                                      и соответствующим им значениям для
                                      найденной ближайшей точки
-    '''
+    """
     df = df_geo.copy()
-    #     lat_array = df[point_lat].values
-    #     lon_array = df[point_lon].values
 
     df['distance'] = [dist_calc(lat, lon, df_lat, df_lon) for df_lat, df_lon in
                       zip(df[point_lat], df[point_lon])]
@@ -54,10 +54,8 @@ def nearest_node(lat, lon, df_geo, point_name, point_lat='lat', point_lon='lon')
     return df.loc[0]
 
 
-#     return df[df['distance']==df['distance'].min()].reset_index(drop=True).loc[0]
-
 def subway_feature(data, subway):
-    '''
+    """
     Функция для добавления новых характеристик, связанных с метро
     (наименование ближайшей станции, расстояние до ближайшей станции)
     :param: data: основной DataFrame с квартирами;
@@ -65,26 +63,26 @@ def subway_feature(data, subway):
 
     :return: new_data: DataFrame data с добавленными характеристиками 'SubwayName' и
                        "SubwayDistance"
-    '''
+    """
 
     new_data = data.copy()
 
-    stations_array = ['' for i in range(len(new_data))]
+    stations_array = ['' for _ in range(len(new_data))]
     distance_array = np.zeros(len(new_data))
     for i in range(len(new_data)):
         df_near_sub = nearest_node(lat=data['geo_lat'][i], lon=data['geo_lon'][i],
-                                   df_geo=subway,
-                                   point_name='StationName')
+                                   df_geo=subway)
         stations_array[i] = df_near_sub['StationName']
         distance_array[i] = df_near_sub['distance']
+
+
+        # отображение прогресса расчетов
+        sys.stdout.write('\r')
+        sys.stdout.write("%d%%" % (100 * i/len(new_data)))
+        sys.stdout.flush()
+        sleep(0.0001)
+
     new_data['StationName'] = stations_array
     new_data['SubwayDistance'] = distance_array
 
     return new_data
-
-
-
-
-
-
-
