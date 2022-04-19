@@ -2,18 +2,25 @@
 name: Lint
 
 # тут список событий, на который экшен должен запускаться
-on: 
-  pull_request: # и на пулл-реквест
+on: [push, pull_request] # и на пулл-реквест
 
 # список того, что нужно делать. каждый job будет выводиться отдельным элементом слева UI
 jobs:
-  lint: # uniqe id 
-    runs-on: ubuntu-latest # на какой машине гонять
+  lint: # unique id
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+        
+    
     steps:  # список шагов, разберем подробнее отдельно ниже
-      - uses: actions/checkout@v3 #checkout делает pull репозитория и ветки, в котором запущен
+      - name: Pull repo and branch
+      - uses: actions/checkout@v3 #checkout 
+      
+      - name: Set up Python ${{ matrix.python-version }}
       - uses: actions/setup-python@v3
         with:
-          python-version: '3.8'
+          python-version: ${{ matrix.python-version }}
           
       - name: Install dependencies
         run: |
@@ -25,4 +32,4 @@ jobs:
         run: flake8 --count --statistics --show-source
 
       - name: Warnings
-        run: flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --extend-exclude=""
+        run: flake8 . --count --exit-zero --max-complexity=10 --max-line-length=80 --statistics --extend-exclude=""
