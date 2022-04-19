@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 kaggle = "*"
 black = "*"
+numpy = "*"
+pandas = "*"
 
 [dev-packages]
 
