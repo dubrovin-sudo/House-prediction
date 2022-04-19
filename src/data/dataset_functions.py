@@ -3,7 +3,7 @@ import requests
 # import json
 
 
-def get_subways():
+def get_subways()->pd.DataFrame:
     """
     Функция для формирования DataFrame с данными о метро СПб
     :param:

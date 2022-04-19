@@ -2,8 +2,10 @@ import numpy as np
 import sys
 from time import sleep
 
+import pandas as pd
 
-def dist_calc(lat1, lon1, lat2, lon2, r_earth=6371.009e3):
+
+def dist_calc(lat1: float, lon1: float, lat2:float, lon2:float, r_earth=6371.009e3)->float:
     """
     Функция для расчета расстояниz между
     двумя географическими координатами
@@ -30,7 +32,8 @@ def dist_calc(lat1, lon1, lat2, lon2, r_earth=6371.009e3):
     return distance
 
 
-def nearest_node(lat, lon, df_geo, point_lat='lat', point_lon='lon'):
+def nearest_node(lat: float, lon: float, df_geo: pd.DataFrame, point_lat='lat'
+                 , point_lon='lon')->pd.core.series.Series:
     """
     Функция поиска ближайшей к указанной точке (lat, lon)
     координаты из набора координат в df_geo
@@ -54,7 +57,7 @@ def nearest_node(lat, lon, df_geo, point_lat='lat', point_lon='lon'):
     return df.loc[0]
 
 
-def subway_feature(data, subway):
+def subway_feature(data: pd.DataFrame, subway: pd.DataFrame)->pd.DataFrame:
     """
     Функция для добавления новых характеристик, связанных с метро
     (наименование ближайшей станции, расстояние до ближайшей станции)
