@@ -36,7 +36,11 @@ def dist_calc(
 
 
 def nearest_node(
-    lat: float, lon: float, df_geo: pd.DataFrame, point_lat="lat", point_lon="lon"
+    lat: float,
+    lon: float,
+    df_geo: pd.DataFrame,
+    point_lat="lat",
+    point_lon="lon",
 ) -> pd.core.series.Series:
     """
     Функция поиска ближайшей к указанной точке (lat, lon)
