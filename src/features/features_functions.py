@@ -70,15 +70,17 @@ def subway_feature(data: pd.DataFrame, subway: pd.DataFrame) -> pd.DataFrame:
     :param: data: основной DataFrame с квартирами;
             subway: DataFrame с данными о станциях метро;
 
-    :return: new_data: DataFrame data с добавленными характеристиками 'SubwayName' и
-                       "SubwayDistance"
+    :return: new_data: DataFrame data с добавленными характеристиками
+    'SubwayName' и 'SubwayDistance'
     """
 
     data_directory = f"{os.path.abspath(os.getcwd())}/data/"
 
     if os.path.isfile(f"{data_directory}/interim/spb_house_with_subway.csv"):
         print(f"You have already created subway features")
-        df_spb_subway = pd.read_csv(f"{data_directory}/interim/spb_house_with_subway.csv")
+        df_spb_subway = pd.read_csv(
+            f"{data_directory}/interim/spb_house_with_subway.csv"
+        )
         print(df_spb_subway.head(5))
     else:
         df_spb_subway = data.copy()
@@ -101,7 +103,8 @@ def subway_feature(data: pd.DataFrame, subway: pd.DataFrame) -> pd.DataFrame:
         df_spb_subway["StationName"] = stations_array
         df_spb_subway["SubwayDistance"] = distance_array
 
-        df_spb_subway.to_csv(f"{data_directory}/interim/spb_house_with_subway.csv",
-                             index=False)
+        df_spb_subway.to_csv(
+            f"{data_directory}/interim/spb_house_with_subway.csv", index=False
+        )
 
     return df_spb_subway

@@ -1,5 +1,5 @@
 import pandas as pd
-from features_functions import *
+from features_functions import subway_feature
 
 # чтение данных
 directory = f"{os.path.abspath(os.getcwd())}/data"
