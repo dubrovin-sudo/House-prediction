@@ -25,5 +25,5 @@ jobs:
 
      - name: Check syntax
        # Stop the build if there are Python syntax errors or undefined names
-       run: flake8 --max-line-length=82 --ignore=F541 --exclude=docs,test_environment.py
+       run: flake8 --max-line-length=83 --ignore=F541 --exclude=docs,test_environment.py
 
