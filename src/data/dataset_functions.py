@@ -49,7 +49,7 @@ def get_subways(path: str) -> pd.DataFrame:
 
     else:
         overpass_url = "https://maps.mail.ru/osm/tools/overpass/api//interpreter"
-        overpass_query = """ 
+        overpass_query = """
         [out:json];
         area["ISO3166-2"="RU-SPE"][admin_level=4];
         (node["station"="subway"](area);
