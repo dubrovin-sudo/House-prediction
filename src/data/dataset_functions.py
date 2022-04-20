@@ -15,15 +15,16 @@ def get_all(path: str) -> pd.DataFrame:
     name = "russia-real-estate-20182021"
     if os.path.isfile(f"{path}/raw/all_v2.csv"):
         print(f"You already have the full dataset!")
-        df_spb = pd.read_csv(f"{path}/raw/df_spb")
+        df_spb = pd.read_csv(f"{path}/raw/df_spb.csv")
         print(df_spb.head(5))
     else:
+        print(f"Downloading dataset : {name}!")
+
         kaggle.api.dataset_download_file(
             f"mrdaniilak/{name}",
             file_name="all_v2.csv",
-            path=path,
+            path=f"{path}/raw/",
         )
-        print(f"Downloading dataset : {name}!")
 
         with zipfile.ZipFile(f"{path}/raw/all_v2.csv.zip", "r") as zip_ref:
             zip_ref.extractall(f"{path}/raw")
@@ -31,7 +32,7 @@ def get_all(path: str) -> pd.DataFrame:
 
     df = pd.read_csv(f"{path}/raw/all_v2.csv")
     df_spb = df[df["region"] == 2661]
-    df_spb.to_csv(f"{path}/df_spb")
+    df_spb.to_csv(f"{path}/raw/df_spb.csv", index=False)
     return df_spb
 
 
@@ -41,9 +42,9 @@ def get_subways(path: str) -> pd.DataFrame:
     :param path:
     :return:
     """
-    if os.path.isfile(f"{path}/external/spb_subways"):
+    if os.path.isfile(f"{path}/external/spb_subways.csv"):
         print(f"You already have the spb_subways dataset!")
-        df_subway = pd.read_csv(f"{path}/external/spb_subways")
+        df_subway = pd.read_csv(f"{path}/external/spb_subways.csv")
         print(df_subway.head(5))
 
     else:
@@ -75,5 +76,5 @@ def get_subways(path: str) -> pd.DataFrame:
                 df_subway = pd.concat(
                     [df_subway, pd.DataFrame(data=data)], axis=0, ignore_index=True
                 )
-        df_subway.to_csv(f"{path}/external/spb_subways", index=False)
+        df_subway.to_csv(f"{path}/external/spb_subways.csv", index=False)
         return df_subway
