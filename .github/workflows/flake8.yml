@@ -2,7 +2,13 @@
 name: Flake8
 
 # тут список событий, на который экшен должен запускаться
-on: [push, pull_request] # и на пулл-реквест
+on:
+ push:
+  branches:
+   - main
+   - feature
+
+[push, pull_request] # и на пулл-реквест
 
 # список того, что нужно делать. каждый job будет выводиться отдельным элементом слева UI
 jobs:
@@ -12,7 +18,7 @@ jobs:
      matrix:
        python-version: ["3.8"]
 
-   steps:
+   steps:     
      - uses: actions/checkout@v3 #checkout
      - uses: actions/setup-python@v3
        with:
@@ -22,6 +28,6 @@ jobs:
        run: |
          python -m pip install --upgrade pipenv wheel
          pip install flake8 pycodestyle
-     - name: Check syntax
+     - name: Check syntax bu flake 8
        # Stop the build if there are Python syntax errors or undefined names
-       run: flake8 --max-line-length=85 --ignore=F541 --exclude=docs,test_environment.py
+       run: flake8 --max-line-length=88 --ignore=F541 --exclude=docs,test_environment.py
