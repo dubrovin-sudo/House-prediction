@@ -9,6 +9,7 @@
 .idea/**/dictionaries
 .idea/**/shelf
 .idea/
+catboost_info/
 requirements.txt
 src/features/test.py
 *.csv
