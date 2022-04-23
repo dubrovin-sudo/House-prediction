@@ -250,3 +250,4 @@ cython_debug/
 /.idea/modules.xml
 /.idea/misc.xml
 /.idea/.gitignore
+/.kaggle/
