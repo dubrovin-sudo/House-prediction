@@ -10,6 +10,8 @@ numpy = "==1.21"
 pandas = "*"
 pycaret = "*"
 scikit-learn = "==0.23.2"
+snakemake = "*"
+click = "*"
 
 [dev-packages]
 

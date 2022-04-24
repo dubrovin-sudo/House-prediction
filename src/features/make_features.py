@@ -1,12 +1,12 @@
-import os
-import pandas as pd
-from features_functions import subway_feature
+from src.features.subway_features import subway_features
 
-# чтение данных
-directory = f"{os.path.abspath(os.getcwd())}/data"
-print(directory)
-df_subways = pd.read_csv(f"{directory}/external/spb_subways.csv")
-df_spb = pd.read_csv(f"{directory}/raw/df_spb.csv")
 
-# формирование данных с новыми характеристиками
-df_spb_subway = subway_feature(df_spb, df_subways)
+RAW_DF_SPB_PATH = "data/raw/df_spb.csv"
+SPB_SUB_PATH = "data/external/spb_subways.csv"
+SPB_SUB_FEATURE_PATH = "data/interim/spb_house_with_subway.csv"
+
+
+if __name__ == "__main__":
+    # Download datasets
+    subway_features(RAW_DF_SPB_PATH, SPB_SUB_PATH, SPB_SUB_FEATURE_PATH)
+

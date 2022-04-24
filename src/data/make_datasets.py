@@ -1,9 +1,13 @@
 import os
-from dataset_functions import get_all, get_subways
+from src.data.get_raw import get_raw
+from src.data.get_subways import get_subways
+
+SPB_SUB_PATH = "data/external/spb_subways.csv"
+ALL_PATH = "data/raw/all_v2.csv"
+SPB_PATH = "data/raw/df_spb.csv"
 
 if __name__ == "__main__":
-    directory = f"{os.path.abspath(os.getcwd())}/data"
-    print(directory)
     # Download datasets
-    get_all(directory)
-    get_subways(directory)
+    get_raw(ALL_PATH, SPB_PATH)
+    get_subways(SPB_SUB_PATH)
+
