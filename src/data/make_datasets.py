@@ -1,4 +1,3 @@
-import os
 from src.data.get_raw import get_raw
 from src.data.get_subways import get_subways
 
@@ -10,4 +9,3 @@ if __name__ == "__main__":
     # Download datasets
     get_raw(ALL_PATH, SPB_PATH)
     get_subways(SPB_SUB_PATH)
-

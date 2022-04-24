@@ -9,4 +9,3 @@ SPB_SUB_FEATURE_PATH = "data/interim/spb_house_with_subway.csv"
 if __name__ == "__main__":
     # Download datasets
     subway_features(RAW_DF_SPB_PATH, SPB_SUB_PATH, SPB_SUB_FEATURE_PATH)
-
