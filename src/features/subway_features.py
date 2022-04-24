@@ -23,8 +23,8 @@ def subway_features(input_data: str, input_subways: str, output: str) -> None:
         print(df_spb_subway.head(5))
     else:
 
-        df_spb_subway = pd.DataFrame()
         data = pd.read_csv(input_data)
+        df_spb_subway = data.copy()
         subways = pd.read_csv(input_subways)
 
         stations_array = ["" for _ in range(len(data))]

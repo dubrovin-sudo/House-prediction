@@ -6,7 +6,7 @@ rule all:
         "data/raw/all_v2.csv",
         "data/raw/df_spb.csv",
         "data/external/spb_subways.csv",
-        "data/interim/spb_house_with_subway.csv"
+        "data/interim/spb_house_with_subway.csv",
 
 
 rule subway_features:
@@ -20,19 +20,15 @@ rule subway_features:
 
 
 rule get_subways:
-    input:
-        None
     output:
-        "data/external/spb_subways.csv"
+        "data/external/spb_subways.csv",
     shell:
         "python3 -m src.data.get_subways {output}"
 
 
 rule make_raw:
-    input:
-        None
     output:
         "data/raw/all_v2.csv",
-        "data/raw/df_spb.csv"
+        "data/raw/df_spb.csv",
     shell:
         "python3 -m src.data.get_raw {output[0]} {output[1]} "
