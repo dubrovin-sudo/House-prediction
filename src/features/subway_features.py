@@ -22,7 +22,6 @@ def subway_features(input_data: str, input_subways: str, output: str) -> None:
         df_spb_subway = pd.read_csv(output)
         print(df_spb_subway.head(5))
     else:
-
         data = pd.read_csv(input_data)
         df_spb_subway = data.copy()
         subways = pd.read_csv(input_subways)
@@ -49,9 +48,9 @@ def subway_features(input_data: str, input_subways: str, output: str) -> None:
 
 
 @click.command()
-@click.argument('input_data', type=click.Path())
-@click.argument('input_subways', type=click.Path())
-@click.argument('output', type=click.Path())
+@click.argument("input_data", type=click.Path())
+@click.argument("input_subways", type=click.Path())
+@click.argument("output", type=click.Path())
 def cli_subway_features(input_data: str, input_subways: str, output: str) -> None:
     """
     Функция для добавления новых характеристик, связанных с метро

@@ -67,48 +67,48 @@ def nearest_node(
     return df.loc[0]
 
 
-def subway_feature(data: pd.DataFrame, subway: pd.DataFrame) -> pd.DataFrame:
-    """
-    Функция для добавления новых характеристик, связанных с метро
-    (наименование ближайшей станции, расстояние до ближайшей станции)
-    :param: data: основной DataFrame с квартирами;
-            subway: DataFrame с данными о станциях метро;
-
-    :return: new_data: DataFrame data с добавленными характеристиками
-    'SubwayName' и 'SubwayDistance'
-    """
-
-    data_directory = f"{os.path.abspath(os.getcwd())}/data/"
-
-    if os.path.isfile(f"{data_directory}/interim/spb_house_with_subway.csv"):
-        print(f"You have already created subway features")
-        df_spb_subway = pd.read_csv(
-            f"{data_directory}/interim/spb_house_with_subway.csv"
-        )
-        print(df_spb_subway.head(5))
-    else:
-        df_spb_subway = data.copy()
-
-        stations_array = ["" for _ in range(len(df_spb_subway))]
-        distance_array = np.zeros(len(df_spb_subway))
-        for i in range(len(df_spb_subway)):
-            df_near_sub = nearest_node(
-                lat=data["geo_lat"][i], lon=data["geo_lon"][i], df_geo=subway
-            )
-            stations_array[i] = df_near_sub["StationName"]
-            distance_array[i] = df_near_sub["distance"]
-
-            # отображение прогресса расчетов
-            sys.stdout.write("\r")
-            sys.stdout.write("%d%%" % (100 * i / len(df_spb_subway)))
-            sys.stdout.flush()
-            sleep(0.0001)
-
-        df_spb_subway["StationName"] = stations_array
-        df_spb_subway["SubwayDistance"] = distance_array
-
-        df_spb_subway.to_csv(
-            f"{data_directory}/interim/spb_house_with_subway.csv", index=False
-        )
-
-    return df_spb_subway
+# def subway_feature(data: pd.DataFrame, subway: pd.DataFrame) -> pd.DataFrame:
+#     """
+#     Функция для добавления новых характеристик, связанных с метро
+#     (наименование ближайшей станции, расстояние до ближайшей станции)
+#     :param: data: основной DataFrame с квартирами;
+#             subway: DataFrame с данными о станциях метро;
+#
+#     :return: new_data: DataFrame data с добавленными характеристиками
+#     'SubwayName' и 'SubwayDistance'
+#     """
+#
+#     data_directory = f"{os.path.abspath(os.getcwd())}/data/"
+#
+#     if os.path.isfile(f"{data_directory}/interim/spb_house_with_subway.csv"):
+#         print(f"You have already created subway features")
+#         df_spb_subway = pd.read_csv(
+#             f"{data_directory}/interim/spb_house_with_subway.csv"
+#         )
+#         print(df_spb_subway.head(5))
+#     else:
+#         df_spb_subway = data.copy()
+#
+#         stations_array = ["" for _ in range(len(df_spb_subway))]
+#         distance_array = np.zeros(len(df_spb_subway))
+#         for i in range(len(df_spb_subway)):
+#             df_near_sub = nearest_node(
+#                 lat=data["geo_lat"][i], lon=data["geo_lon"][i], df_geo=subway
+#             )
+#             stations_array[i] = df_near_sub["StationName"]
+#             distance_array[i] = df_near_sub["distance"]
+#
+#             # отображение прогресса расчетов
+#             sys.stdout.write("\r")
+#             sys.stdout.write("%d%%" % (100 * i / len(df_spb_subway)))
+#             sys.stdout.flush()
+#             sleep(0.0001)
+#
+#         df_spb_subway["StationName"] = stations_array
+#         df_spb_subway["SubwayDistance"] = distance_array
+#
+#         df_spb_subway.to_csv(
+#             f"{data_directory}/interim/spb_house_with_subway.csv", index=False
+#         )
+#
+#     return df_spb_subway
