@@ -66,21 +66,28 @@ def raw_features(df: str) -> pd.DataFrame:
     return df
 
 
-def get_raw(output_all: str, output_region: str) -> None:
+def get_raw(output_all="data/raw/all_v2.csv", output_region="data/raw/df_spb.csv") -> None:
     """
     Function load data from Kaggle and create pd.DataFrame
-    :param: output_all:
-    :param: output_region:
+    :param output_all:
+    :param output_region:
     :return:
     """
+    # output_all = "data/raw/all_v2.csv"
+    # output_region = "data/raw/df_spb.csv"
     name = "russia-real-estate-20182021"
     if os.path.isfile(output_all):
-        print(f"You already have the full dataset!")
-        df = pd.read_csv(output_all)
-        df_spb = df.pipe(clean_data)
-        df_spb = df_spb.pipe(raw_features)
-        print(df_spb.head(5))
-        df_spb.to_csv(output_region, index=False)
+        print(f"You already have {output_all} dataset!")
+        if os.path.isfile(output_region):
+            print(f"You already have {output_region} dataset!")
+            df_spb = pd.read_csv(output_region)
+            print(df_spb.head(5))
+        else:
+            df = pd.read_csv(output_all)
+            df_spb = df.pipe(clean_data)
+            df_spb = df_spb.pipe(raw_features)
+            print(df_spb.head(5))
+            df_spb.to_csv(output_region, index=False)
     else:
         print(f"Downloading dataset : {name}!")
         kaggle.api.authenticate()
@@ -102,8 +109,8 @@ def get_raw(output_all: str, output_region: str) -> None:
 
 
 @click.command()
-@click.argument("output_all", type=click.Path())
-@click.argument("output_region", type=click.Path())
+@click.argument('output_all', type=click.Path())
+@click.argument('output_region', type=click.Path())
 def cli_get_raw(output_all: str, output_region: str) -> None:
     """
     Function load data from Kaggle and create pd.DataFrame

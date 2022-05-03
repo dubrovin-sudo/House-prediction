@@ -6,7 +6,7 @@ Status of Last Deployment: <br>
 
 ## About
 
-![](https://wallpaperaccess.com/full/508402.jpg)l/508402.jpg
+![](https://wallpaperaccess.com/full/508402.jpg)
 
 The dataset consists of lists of unique objects of popular portals for the sale of real estate in Russia. More than 540 thousand objects.
 The dataset contains 540000 real estate objects in Russia.
@@ -16,7 +16,7 @@ The dataset contains 540000 real estate objects in Russia.
 The Russian real estate market has a relatively short history. In the Soviet era, all properties were state-owned; people only had the right to use them with apartments allocated based on one's place of work. As a result, options for moving were fairly limited. However, after the fall of the Soviet Union, the Russian real estate market emerged and Muscovites could privatize and subsequently sell and buy properties for the first time. Today, Russian real estate is booming. It offers many exciting opportunities and high returns for lifestyle and investment.
 The real estate market has been in a growth phase for several years, which means that you can still find properties at very attractive prices, but with good chances of increasing their value in the future.
 
-### Dataset
+### [Dataset](https://www.kaggle.com/datasets/mrdaniilak/russia-real-estate-20182021)
 
 The dataset has 13 fields.
 
