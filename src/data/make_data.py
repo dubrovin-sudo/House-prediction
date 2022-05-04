@@ -7,11 +7,8 @@ if __name__ == "__main__":
     # Download raw datasets
     get_raw()
     # Download external datasets
-    get_external('park')
-    get_external('subway')
+    get_external()
     # Create interim's datasets
-    get_interim("park")
-    get_interim("subway")
-
-
-
+    get_interim()
+    # Create external's datasets
+    get_external()

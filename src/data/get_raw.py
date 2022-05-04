@@ -33,8 +33,8 @@ def clean_data(df: str) -> pd.DataFrame:
     df = df[(df["area"] <= MAX_AREA) & (df["area"] >= MIN_AREA)]
     df = df[(df["price"] <= MAX_PRICE) & (df["price"] >= MIN_PRICE)]
     # Drop outliers based on price per square meter
-    df["sqm_price"] = df["price"] / df["area"]
-    df = df[(df["sqm_price"] >= MIN_SQM_PRICE) & (df["sqm_price"] <= MAX_SQM_PRICE)]
+    # df["sqm_price"] = df["price"] / df["area"]
+    # df = df[(df["sqm_price"] >= MIN_SQM_PRICE) & (df["sqm_price"] <= MAX_SQM_PRICE)]
     # Fix kitchen area
     df.loc[
         (df["kitchen_area"] >= MAX_KITCHEN) | (df["area"] <= MIN_AREA), "kitchen_area"

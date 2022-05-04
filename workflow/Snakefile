@@ -3,32 +3,44 @@ configfile: "workflow/config.yaml"
 
 rule all:
     input:
-#         "data/raw/all_v2.csv",
+        "data/raw/all_v2.csv",
         "data/raw/df_spb.csv",
+        "data/external/spb_parks.csv",
         "data/external/spb_subways.csv",
+        "data/interim/spb_house_with_park.csv",
         "data/interim/spb_house_with_subway.csv",
+        'data/processed/df_spb_processed.csv'
 
 
-rule subway_features:
+rule make_processed:
+    output:
+        "data/processed/df_spb_processed.csv"
+    shell:
+        "python3 -m src.data.get_processed {output}"
+
+rule make_interim:
     input:
         "data/raw/df_spb.csv",
+        "data/external/spb_parks.csv",
         "data/external/spb_subways.csv"
     output:
+        "data/interim/spb_house_with_park.csv",
         "data/interim/spb_house_with_subway.csv"
     shell:
-        "python3 -m src.features.subway_features {input[0]} {input[1]} {output}"
+        "python3 -m src.data.get_interim {input[0]} {input[1]} {input[2]} {output[0]} {output[1]}"
 
 
-rule get_subways:
+rule make_external:
     output:
-        "data/external/spb_subways.csv",
+        "data/external/spb_parks.csv",
+        "data/external/spb_subways.csv"
     shell:
-        "python3 -m src.data.get_subways {output}"
+        "python3 -m src.data.get_external {output[0]} {output[1]}"
 
 
 rule make_raw:
     output:
         "data/raw/all_v2.csv",
-        "data/raw/df_spb.csv",
+        "data/raw/df_spb.csv"
     shell:
-        "python3 -m src.data.get_raw {output[0]} {output[1]} "
+        "python3 -m src.data.get_raw {output[0]} {output[1]}"

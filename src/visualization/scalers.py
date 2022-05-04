@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import RobustScaler
 from sklearn.preprocessing import Normalizer
 from sklearn.preprocessing import QuantileTransformer
-from sklearn.preprocessing import PowerTransformer
+# from sklearn.preprocessing import PowerTransformer
 
 
 def draw_scaler(
@@ -35,7 +35,7 @@ def draw_scaler(
         "minmaxscaler",
         "maxabsscaler",
         "robustscaler",
-        "powertransformer",
+        # "powertransformer",
         "quantiletransformer",
     ]
     scaler_idx = scalers.index(scaler)
@@ -48,14 +48,14 @@ def draw_scaler(
             "Data after robust scaling",
             RobustScaler(quantile_range=(25, 75)).fit_transform(X),
         ),
-        (
-            "Data after power transformation (Yeo-Johnson)",
-            PowerTransformer(method="yeo-johnson").fit_transform(X),
-        ),
-        (
-            "Data after power transformation (Box-Cox)",
-            PowerTransformer(method="box-cox").fit_transform(X),
-        ),
+        # (
+        #     "Data after power transformation (Yeo-Johnson)",
+        #     PowerTransformer(method="yeo-johnson").fit_transform(X),
+        # ),
+        # (
+        #     "Data after power transformation (Box-Cox)",
+        #     PowerTransformer(method="box-cox").fit_transform(X),
+        # ),
         (
             "Data after quantile transformation (uniform pdf)",
             QuantileTransformer(output_distribution="uniform").fit_transform(X),
@@ -74,7 +74,7 @@ def draw_scaler(
     cmap = getattr(cm, "plasma_r", cm.hot_r)
 
     # make_plot(features, feature_mapping, distributions, scaler, X, y)
-    title, X = distributions[scaler_idx + 1]
+    title, X = distributions[scaler_idx+1]
     ax_zoom_out, ax_zoom_in, ax_colorbar = create_axes(title)
     axarr = (ax_zoom_out, ax_zoom_in)
     plot_distribution(
@@ -213,3 +213,12 @@ def plot_distribution(
         X[:, 0], bins=hist_nbins, orientation="vertical", color="grey", ec="grey"
     )
     hist_X0.axis("off")
+
+
+if __name__ == "__main__":
+    df = pd.read_csv("../../data/processed/df_spb_processed.csv")
+    df = df.select_dtypes(exclude=["object"])
+    X_full, y_full = df.loc[:, df.columns != "price"], df["price"]
+    features = ["area_to_rooms", "kitchen_area"]
+    draw_scaler(X_full, y_full, features, 'robustscaler')
+
