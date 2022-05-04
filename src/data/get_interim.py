@@ -1,12 +1,10 @@
 import os
-import sys
-import click
-import numpy as np
-import pandas as pd
-from time import sleep
 
-from src.data.process_external import add_to_interim
+import click
+import pandas as pd
+
 from src.data.get_external import get_external
+from src.data.process_external import add_to_interim
 
 
 def get_interim(
