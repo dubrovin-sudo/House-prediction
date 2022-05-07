@@ -1,10 +1,8 @@
 import os
 import pandas as pd
-import sys
-from time import sleep
 import numpy as np
 import click
-from src.features.process_external import nearest_node
+from src.features.process_external import dist_calc
 
 
 def park_features(input_data="data/interim/clean_raw_data.csv",
@@ -29,23 +27,21 @@ def park_features(input_data="data/interim/clean_raw_data.csv",
         data = pd.read_csv(input_data)
         parks = pd.read_csv(input_parks)
 
-        id_array = ["" for _ in range(len(data))]
-        distance_array = np.zeros(len(data))
-        for i in range(len(data)):
-            df_near_park = nearest_node(
-                lat=data["geo_lat"][i], lon=data["geo_lon"][i], df_geo=parks
-            )
-            id_array[i] = df_near_park["park"]
-            distance_array[i] = df_near_park["distance"]
+        lat1 = data.loc[:, 'geo_lat'].values
+        lat1 = lat1.reshape((lat1.shape[0], 1))
 
-            # отображение прогресса расчетов
-            sys.stdout.write("\r")
-            sys.stdout.write("%d%%" % (100 * i / len(data)))
-            sys.stdout.flush()
-            sleep(0.0001)
+        lon1 = data.loc[:, 'geo_lon'].values
+        lon1 = lon1.reshape((lon1.shape[0], 1))
 
-        df_spb_park["park_id"] = id_array
-        df_spb_park["park_distance"] = distance_array
+        lat2 = parks['lat'].values
+        lon2 = parks['lon'].values
+
+        distance = dist_calc(lat1, lon1, lat2, lon2)
+
+        index = np.argmin(distance, axis=1)
+        df_spb_park['park_id'] = parks.loc[index, 'park'].values
+        df_spb_park['park_distance'] = distance.min(axis=1)
+
         print(df_spb_park.head(5))
         df_spb_park.to_csv(output, index=False)
 

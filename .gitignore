@@ -12,6 +12,7 @@
 catboost_info/
 requirements.txt
 src/features/test.py
+notebooks/test.ipynb
 *.csv
 # Generated files
 .idea/**/contentModel.xml

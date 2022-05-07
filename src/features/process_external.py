@@ -6,17 +6,19 @@ import pandas as pd
 
 
 def dist_calc(
-    lat1: float, lon1: float, lat2: float, lon2: float, r_earth=6371.009e3
-) -> float:
+    lat1: np.ndarray, lon1: np.ndarray,
+    lat2: np.ndarray, lon2: np.ndarray,
+    r_earth=6371.009e3
+) -> np.ndarray:
     """
     Функция для расчета расстояниz между
     двумя географическими координатами
     :param lat1:
-    :param lon1: координаты в градусах первой точки;
+    :param lon1: координаты в градусах квартир;
     :param lat2:
-    :param lon2: координаты в градусах первой точки;
+    :param lon2: координаты в градусах станций метро;
     :param r_earth: радиус Земли.
-    :return: растояние между двумя точками, м.
+    :return: массив расстояний между всеми квартирами и всеми станциями метро.
     """
     lat1 *= np.pi / 180
     lon1 *= np.pi / 180
