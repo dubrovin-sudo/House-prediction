@@ -1,0 +1,74 @@
+stages:
+    get_raw:
+      cmd: python3 -m src.data.get_raw data/raw/all_v2.csv
+      deps:
+        - src/data/get_raw.py
+      outs:
+        - data/raw/all_v2.csv
+
+    get_parks:
+      cmd: python3 -m src.data.get_parks data/external/spb_parks.csv
+      deps:
+        - src/data/get_parks.py
+      outs:
+        - data/external/spb_parks.csv
+
+    get_subways:
+      cmd: python3 -m src.data.get_subways data/external/spb_subways.csv
+      deps:
+        - src/data/get_subways.py
+      outs:
+        - data/external/spb_subways.csv
+
+    select_region:
+      cmd: python3 -m src.features.select_region data/raw/all_v2.csv data/raw/df_spb.csv 2661
+      deps:
+        - src/features/select_region.py
+        - data/raw/all_v2.csv
+      outs:
+        - data/raw/df_spb.csv
+
+    clean_raw:
+      cmd: python3 -m src.features.clean_raw data/raw/df_spb.csv data/interim/clean_raw_data.csv
+      deps:
+        - src/features/clean_raw.py
+        - data/raw/df_spb.csv
+      outs:
+        - data/interim/clean_raw_data.csv
+
+    raw_feature:
+      cmd: python3 -m src.features.raw_features data/interim/clean_raw_data.csv data/interim/raw_features.csv
+      deps:
+        - src/features/raw_features.py
+        - data/interim/clean_raw_data.csv
+      outs:
+        - data/interim/raw_features.csv
+
+    subway_features:
+      cmd: python3 -m src.features.subway_features data/interim/clean_raw_data.csv data/external/spb_subways.csv data/interim/subways_features.csv
+      deps:
+        - src/features/subway_features.py
+        - data/interim/clean_raw_data.csv
+        - data/external/spb_subways.csv
+      outs:
+        - data/interim/subways_features.csv
+
+    park_features:
+      cmd: python3 -m src.features.park_features data/interim/clean_raw_data.csv data/external/spb_parks.csv data/interim/parks_features.csv
+      deps:
+        - src/features/park_features.py
+        - data/interim/clean_raw_data.csv
+        - data/external/spb_parks.csv
+      outs:
+        - data/interim/parks_features.csv
+
+    get_processed:
+      cmd: python3 -m src.features.get_processed data/interim/clean_raw_data.csv data/interim/parks_features.csv data/interim/subways_features.csv data/interim/raw_features.csv data/processed/df_spb_processed.csv
+      deps:
+        - src/features/get_processed.py
+        - data/interim/clean_raw_data.csv
+        - data/interim/parks_features.csv
+        - data/interim/subways_features.csv
+        - data/interim/raw_features.csv
+      outs:
+        - data/processed/df_spb_processed.csv

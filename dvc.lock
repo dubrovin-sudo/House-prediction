@@ -1,0 +1,129 @@
+schema: '2.0'
+stages:
+  get_raw:
+    cmd: python3 -m src.data.get_raw data/raw/all_v2.csv
+    deps:
+    - path: src/data/get_raw.py
+      md5: 06cfe1f091dd8cc802f6ad52b570ad95
+      size: 1193
+    outs:
+    - path: data/raw/all_v2.csv
+      md5: 00af12733984c983b49f412cef232a9f
+      size: 408179741
+  select_region:
+    cmd: python3 -m src.features.select_region data/raw/all_v2.csv data/raw/df_spb.csv
+      2661
+    deps:
+    - path: data/raw/all_v2.csv
+      md5: 00af12733984c983b49f412cef232a9f
+      size: 408179741
+    - path: src/features/select_region.py
+      md5: 7a6e3ed4d078f30b1da9ba738b4dbd59
+      size: 1021
+    outs:
+    - path: data/raw/df_spb.csv
+      md5: 24934a954e81bb0b889e9ee116eab5c4
+      size: 34775282
+  clean_raw:
+    cmd: python3 -m src.features.clean_raw data/raw/df_spb.csv data/interim/clean_raw_data.csv
+    deps:
+    - path: data/raw/df_spb.csv
+      md5: 24934a954e81bb0b889e9ee116eab5c4
+      size: 34775282
+    - path: src/features/clean_raw.py
+      md5: 2d6a4c125822a850b778b0b0a02894bf
+      size: 1821
+    outs:
+    - path: data/interim/clean_raw_data.csv
+      md5: 66bc7d03ac3d7f3015b2d30254c834c2
+      size: 27772010
+  get_parks:
+    cmd: python3 -m src.data.get_parks data/external/spb_parks.csv
+    deps:
+    - path: src/data/get_parks.py
+      md5: e8451eaa1f50ccc984156f8ba1ae2471
+      size: 1751
+    outs:
+    - path: data/external/spb_parks.csv
+      md5: a66935a751eeaa27897fed0c15faa97e
+      size: 10534
+  park_features:
+    cmd: python3 -m src.features.park_features data/interim/clean_raw_data.csv data/external/spb_parks.csv
+      data/interim/parks_features.csv
+    deps:
+    - path: data/external/spb_parks.csv
+      md5: a66935a751eeaa27897fed0c15faa97e
+      size: 10534
+    - path: data/interim/clean_raw_data.csv
+      md5: 66bc7d03ac3d7f3015b2d30254c834c2
+      size: 27772010
+    - path: src/features/park_features.py
+      md5: fa0a79afdd68e46e27022a6b352226de
+      size: 2421
+    outs:
+    - path: data/interim/parks_features.csv
+      md5: 6c311ec24bfa30c85362491513213ca0
+      size: 12167369
+  get_subways:
+    cmd: python3 -m src.data.get_subways data/external/spb_subways.csv
+    deps:
+    - path: src/data/get_subways.py
+      md5: a8ef33755cb3d699d08c21496a770fde
+      size: 1734
+    outs:
+    - path: data/external/spb_subways.csv
+      md5: 3cff9add70a1981a86c7a24a01f10c2b
+      size: 3551
+  subway_features:
+    cmd: python3 -m src.features.subway_features data/interim/clean_raw_data.csv data/external/spb_subways.csv
+      data/interim/subways_features.csv
+    deps:
+    - path: data/external/spb_subways.csv
+      md5: 3cff9add70a1981a86c7a24a01f10c2b
+      size: 3551
+    - path: data/interim/clean_raw_data.csv
+      md5: 66bc7d03ac3d7f3015b2d30254c834c2
+      size: 27772010
+    - path: src/features/subway_features.py
+      md5: 723c95035a601bc5d1931d64462a2546
+      size: 2531
+    outs:
+    - path: data/interim/subways_features.csv
+      md5: 46f3b8ca9c604aa7c388228ff6b7de09
+      size: 20368803
+  raw_feature:
+    cmd: python3 -m src.features.raw_features data/interim/clean_raw_data.csv data/interim/raw_features.csv
+    deps:
+    - path: data/interim/clean_raw_data.csv
+      md5: 66bc7d03ac3d7f3015b2d30254c834c2
+      size: 27772010
+    - path: src/features/raw_features.py
+      md5: 3c5abe41e8d1cbd0c408631f41b01ffc
+      size: 1448
+    outs:
+    - path: data/interim/raw_features.csv
+      md5: c8e71f9e903724093261aa47869cc08e
+      size: 12201676
+  get_processed:
+    cmd: python3 -m src.features.get_processed data/interim/clean_raw_data.csv data/interim/parks_features.csv
+      data/interim/subways_features.csv data/interim/raw_features.csv data/processed/df_spb_processed.csv
+    deps:
+    - path: data/interim/clean_raw_data.csv
+      md5: 66bc7d03ac3d7f3015b2d30254c834c2
+      size: 27772010
+    - path: data/interim/parks_features.csv
+      md5: 6c311ec24bfa30c85362491513213ca0
+      size: 12167369
+    - path: data/interim/raw_features.csv
+      md5: c8e71f9e903724093261aa47869cc08e
+      size: 12201676
+    - path: data/interim/subways_features.csv
+      md5: 46f3b8ca9c604aa7c388228ff6b7de09
+      size: 20368803
+    - path: src/features/get_processed.py
+      md5: 8e2b4c68712c83f2bcdd37dc3f611b01
+      size: 2491
+    outs:
+    - path: data/processed/df_spb_processed.csv
+      md5: 179ad34551125002f6a514e7c3cfd435
+      size: 70324861

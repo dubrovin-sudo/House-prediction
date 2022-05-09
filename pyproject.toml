@@ -8,6 +8,8 @@ authors = ["Aleksandr Dubrovin <dubrovinmail@gmail.com>"]
 python = "^3.8"
 numpy = "^1.22.3"
 pandas = "^1.4.2"
+mlflow = "^1.25.1"
+dvc = "^2.10.2"
 
 [tool.poetry.dev-dependencies]
 matplotlib = "^3.5.2"

@@ -24,7 +24,7 @@ rule get_processed:
     output:
         "data/processed/df_spb_processed.csv"
     shell:
-        "python3 -m src.data.get_processed {input[0]} {input[1]} {input[2]}  {input[3]}  {output}"
+        "python3 -m src.features.get_processed {input[0]} {input[1]} {input[2]}  {input[3]}  {output}"
 
 
 rule park_features:
@@ -34,7 +34,7 @@ rule park_features:
     output:
         "data/interim/parks_features.csv"
     shell:
-        "python3 -m src.data.park_features {input[0]} {input[1]} {output}"
+        "python3 -m src.features.park_features {input[0]} {input[1]} {output}"
 
 
 rule subway_features:
@@ -44,16 +44,16 @@ rule subway_features:
     output:
         "data/interim/subways_features.csv"
     shell:
-        "python3 -m src.data.subway_features {input[0]} {input[1]} {output}"
+        "python3 -m src.features.subway_features {input[0]} {input[1]} {output}"
 
 
-rule raw_feature:
+rule raw_features:
     input:
         "data/interim/clean_raw_data.csv"
     output:
         "data/interim/raw_features.csv"
     shell:
-        "python3 -m src.data.raw_features {input} {output}"
+        "python3 -m src.features.raw_features {input} {output}"
 
 
 rule clean_raw:
@@ -62,7 +62,7 @@ rule clean_raw:
     output:
         "data/interim/clean_raw_data.csv"
     shell:
-        "python3 -m src.data.clean_raw {input} {output}"
+        "python3 -m src.features.clean_raw {input} {output}"
 
 
 rule select_region:
@@ -71,7 +71,7 @@ rule select_region:
     output:
         "data/raw/df_spb.csv"
     shell:
-        "python3 -m src.data.select_region {input} {output} {REGION_ID}"
+        "python3 -m src.features.select_region {input} {output} {REGION_ID}"
 
 
 rule get_subways:
