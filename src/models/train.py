@@ -40,16 +40,16 @@ def train(
 
 
 @click.command()
-@click.argument("df_train", type=click.Path(exists=True), nargs=2)
-@click.argument("model_path", type=click.Path())
-def cli_train(df_train: Tuple[str], model_path: str) -> None:
+@click.argument("model_path", type=click.Path(exists=True))
+@click.argument("df_train", type=click.Path(), nargs=2)
+def cli_train(model_path: str, df_train: Tuple[str]) -> None:
     """
     Function for train model
     :param model_path:
     :param df_train:
     :return:
     """
-    train(df_train,model_path)
+    train(model_path, df_train)
     print('Model saved!')
     # python3.8 train.py '../../models/model.clf' '../../data/processed/x_trainval.npy'
     # '../../data/processed/y_trainval.npy'
