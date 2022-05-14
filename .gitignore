@@ -253,3 +253,10 @@ cython_debug/
 /.idea/.gitignore
 /.kaggle/
 /.snakemake/
+/src/models/lol.py
+/data/processed/x_test.npy
+/data/processed/x_trainval.npy
+/data/processed/y_test.npy
+/data/processed/y_trainval.npy
+/models/model.clf
+/reports/figures/results.json
