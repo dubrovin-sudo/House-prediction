@@ -40,7 +40,7 @@ def train(
 
 
 @click.command()
-@click.argument("model_path", type=click.Path(exists=True))
+@click.argument("model_path", type=click.Path())
 @click.argument("df_train", type=click.Path(), nargs=2)
 def cli_train(model_path: str, df_train: Tuple[str]) -> None:
     """
