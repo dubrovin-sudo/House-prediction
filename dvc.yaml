@@ -100,8 +100,8 @@ stages:
         - models/model.clf
         - data/processed/x_test.npy
         - data/processed/y_test.npy
-      outs:
-        - reports/figures/results.json
+#      outs:
+#        - reports/figures/results.json
       metrics:
         - reports/figures/results.json
 
