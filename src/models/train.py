@@ -59,11 +59,13 @@ def train(
     )
     mlflow.log_params(params)
     mlflow.log_artifact(model_path)
+    mlflow.log_metrics(score)
 
     print(f'Coefficient of determination of model is {score["r2"]}')
     print(f'MSE metric of model is {score["mse"]}')
     print(f'MAE metric of model is {score["mae"]}')
     json.dump(score, open(results_path, "w"))
+
 
 
 mlflow.set_tracking_uri('http://127.0.0.1:5000')
