@@ -260,3 +260,5 @@ cython_debug/
 /data/processed/y_trainval.npy
 /models/model.clf
 /reports/figures/results.json
+/mydb.sqlite
+/mlruns/

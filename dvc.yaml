@@ -85,23 +85,24 @@ stages:
         - data/processed/y_test.npy
 
     train:
-      cmd: python3 -m src.models.train models/model.clf data/processed/x_trainval.npy data/processed/y_trainval.npy
+      cmd: python3 -m src.models.train data/processed/x_trainval.npy data/processed/y_trainval.npy data/processed/x_test.npy data/processed/y_test.npy models/model.clf reports/figures/results.json
       deps:
         - src/models/train.py
         - data/processed/x_trainval.npy
         - data/processed/y_trainval.npy
       outs:
         - models/model.clf
-
-    evaluate:
-      cmd: python3 -m src.models.evaluate models/model.clf reports/figures/results.json data/processed/x_test.npy data/processed/y_test.npy
-      deps:
-        - src/models/evaluate.py
-        - models/model.clf
-        - data/processed/x_test.npy
-        - data/processed/y_test.npy
-#      outs:
-#        - reports/figures/results.json
-      metrics:
         - reports/figures/results.json
+
+#    evaluate:
+#      cmd: python3 -m src.models.evaluate models/model.clf reports/figures/results.json data/processed/x_test.npy data/processed/y_test.npy
+#      deps:
+#        - src/models/evaluate.py
+#        - models/model.clf
+#        - data/processed/x_test.npy
+#        - data/processed/y_test.npy
+##      outs:
+##        - reports/figures/results.json
+#      metrics:
+#        - reports/figures/results.json
 
