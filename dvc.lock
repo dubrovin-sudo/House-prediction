@@ -71,8 +71,8 @@ stages:
       md5: 5f0145e334e77e0f0ab6c432b7d7c557
       size: 70323044
     - path: src/models/prepare.py
-      md5: 165817bfa4213fb067c0f581b7401e3b
-      size: 1803
+      md5: 472b20daf4f3970f937e04863bb83c0d
+      size: 1887
     outs:
     - path: data/processed/x_test.npy
       md5: 724218c8a17163300cc981a04b35ee73
@@ -161,12 +161,12 @@ stages:
       md5: 89f8deeb1b81aade8752c025da6871f9
       size: 1961576
     - path: src/models/train.py
-      md5: 55021d1d5519fe4c77f2ebe8004e6633
-      size: 3048
+      md5: 01e6829a0c4544b601757ab1de37a7b2
+      size: 4255
     outs:
     - path: models/model.clf
-      md5: dbb1ba783616551a484dcaa6d70f648e
-      size: 2861684
+      md5: 0d66af89cf313a86895fcff2b1f6460c
+      size: 2862102
     - path: reports/figures/results.json
       md5: da4af2ae6f181cde385926090d0f5b47
       size: 79
