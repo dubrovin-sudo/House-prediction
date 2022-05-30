@@ -23,7 +23,7 @@ def set_seed(seed_value: int = 12321) -> None:
     # tf.set_random_seed(seed_value)
     # 5. For layers that introduce randomness like dropout
     # model.add(Dropout(0.25, seed=seed_value))
-    #6 Configure a new global `tensorflow` session
+    # 6 Configure a new global `tensorflow` session
     # from keras import backend as K
     # session_conf = tf.ConfigProto(intra_op_parallelism_threads=1,
     #                               inter_op_parallelism_threads=1)

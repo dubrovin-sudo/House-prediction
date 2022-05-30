@@ -16,7 +16,7 @@ def get_subways(output_subway="data/external/spb_subways.csv") -> None:
         print(df_feature.head(5))
     else:
         overpass_url = "https://maps.mail.ru/osm/tools/overpass/api//interpreter"
-        overpass_query = """ 
+        overpass_query = """
                     [out:json];
                     area["ISO3166-2"="RU-SPE"][admin_level=4];
                     (node["station"="subway"](area);
