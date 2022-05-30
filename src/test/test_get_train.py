@@ -1,15 +1,15 @@
-import mlflow
-import numpy as np
-import pytest
-
-from src.models.train import cli_train
-from click.testing import CliRunner
-from mlflow.models.signature import infer_signature
-from mlflow.tracking import MlflowClient
-
-
-# Initialize runner
-runner = CliRunner()
+# import mlflow
+# import numpy as np
+# import pytest
+#
+# from src.models.train import cli_train
+# from click.testing import CliRunner
+# from mlflow.models.signature import infer_signature
+# from mlflow.tracking import MlflowClient
+#
+#
+# # Initialize runner
+# runner = CliRunner()
 
 
 # def test_cli_command():
@@ -36,5 +36,3 @@ runner = CliRunner()
 #     print('---')
 #     accuracy = train(model, inputs = batches[0])
 #     assert accuracy == pytest.approx((0.95, abs=0.05))
-
-

@@ -12,6 +12,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import RobustScaler
 from sklearn.preprocessing import Normalizer
 from sklearn.preprocessing import QuantileTransformer
+
 # from sklearn.preprocessing import PowerTransformer
 
 
@@ -74,7 +75,7 @@ def draw_scaler(
     cmap = getattr(cm, "plasma_r", cm.hot_r)
 
     # make_plot(features, feature_mapping, distributions, scaler, X, y)
-    title, X = distributions[scaler_idx+1]
+    title, X = distributions[scaler_idx + 1]
     ax_zoom_out, ax_zoom_in, ax_colorbar = create_axes(title)
     axarr = (ax_zoom_out, ax_zoom_in)
     plot_distribution(
@@ -220,5 +221,4 @@ if __name__ == "__main__":
     df = df.select_dtypes(exclude=["object"])
     X_full, y_full = df.loc[:, df.columns != "price"], df["price"]
     features = ["area_to_rooms", "kitchen_area"]
-    draw_scaler(X_full, y_full, features, 'robustscaler')
-
+    draw_scaler(X_full, y_full, features, "robustscaler")

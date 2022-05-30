@@ -60,4 +60,3 @@ def cli_clean_raw(input_file="data/raw/df_spb.csv",
 
 if __name__ == "__main__":
     cli_clean_raw()
-    

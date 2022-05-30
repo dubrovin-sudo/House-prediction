@@ -16,7 +16,6 @@ def get_subways(output_subway="data/external/spb_subways.csv") -> None:
         print(df_feature.head(5))
     else:
         overpass_url = "https://maps.mail.ru/osm/tools/overpass/api//interpreter"
-
         overpass_query = """ 
                     [out:json];
                     area["ISO3166-2"="RU-SPE"][admin_level=4];
@@ -33,19 +32,22 @@ def get_subways(output_subway="data/external/spb_subways.csv") -> None:
         for i, element in enumerate(data["elements"]):
 
             if element["type"] == "node":
-                data = {"subway": [element["tags"]["name"]],
-                        "lat": [element["lat"]],
-                        "lon": [element["lon"]], }
+                data = {
+                    "subway": [element["tags"]["name"]],
+                    "lat": [element["lat"]],
+                    "lon": [element["lon"]],
+                }
 
                 df_subway = pd.concat(
-                    [df_subway, pd.DataFrame(data=data)], axis=0, ignore_index=True)
+                    [df_subway, pd.DataFrame(data=data)], axis=0, ignore_index=True
+                )
 
         print(df_subway.head(5))
         df_subway.to_csv(output_subway, index=False)
 
 
 @click.command()
-@click.argument('output_subway', type=click.Path())
+@click.argument("output_subway", type=click.Path())
 def cli_get_subways(output_subway: str) -> None:
     """
     get_subway for terminal

@@ -19,14 +19,15 @@ remote_server_uri = os.getenv("MLFLOW_TRACKING_URI")
 mlflow.set_tracking_uri(remote_server_uri)
 # mlflow.set_experiment("real_estate")
 
+
 def train(
-        df_train=(
-                "../../data/processed/x_trainval.npy",
-                "../../data/processed/y_trainval.npy",
-        ),
-        df_test=("../../data/processed/x_test.npy", "../../data/processed/y_test.npy"),
-        model_path="../../models/model.clf",
-        results_path="../../reports/figures/results.json",
+    df_train=(
+        "../../data/processed/x_trainval.npy",
+        "../../data/processed/y_trainval.npy",
+    ),
+    df_test=("../../data/processed/x_test.npy", "../../data/processed/y_test.npy"),
+    model_path="../../models/model.clf",
+    results_path="../../reports/figures/results.json",
 ) -> None:
     """
     Function for train model
@@ -75,9 +76,6 @@ def train(
         # Create an input example, signature to store in the MLflow model registry
         signature = infer_signature(x_test, y_pred)
         input_example = np.expand_dims(x_test[0], axis=0)
-        print(x_test.shape)
-        print(input_example.shape)
-
 
         mlflow.log_params(params)
         mlflow.log_artifact(model_path)
@@ -87,7 +85,7 @@ def train(
             artifact_path="model",
             registered_model_name="real_estate_lgbm",
             signature=signature,
-            input_example=input_example
+            input_example=input_example,
         )
 
         print(f'Coefficient of determination of model is {score["r2"]}')
@@ -102,7 +100,7 @@ def train(
 @click.argument("model_path", type=click.Path())
 @click.argument("results_path", type=click.Path())
 def cli_train(
-        df_train: Tuple[str], df_test: Tuple[str], model_path: str, results_path: str
+    df_train: Tuple[str], df_test: Tuple[str], model_path: str, results_path: str
 ) -> None:
     """
     Function for train model
@@ -114,8 +112,10 @@ def cli_train(
     """
     train(df_train, df_test, model_path, results_path)
     print("Model saved!")
-    # python3.8 train.py '../../data/processed/x_trainval.npy' '../../data/processed/y_trainval.npy'
-    # '../../data/processed/x_test.npy' '../../data/processed/y_test.npy' '../../models/model.clf'
+    # python3.8 train.py '../../data/processed/x_trainval.npy'
+    # '../../data/processed/y_trainval.npy'
+    # '../../data/processed/x_test.npy' '../../data/processed/y_test.npy'
+    # '../../models/model.clf'
     # '../../reports/figures/results.json'
 
 
@@ -125,4 +125,5 @@ if __name__ == "__main__":
     # export AWS_ACCESS_KEY_ID=minioadmin
     # export AWS_SECRET_ACCESS_KEY=minioadmin
     # Поднять модель через mlflow
-    # mlflow models serve --no-conda -m s3://arts/0/fdbe82916e074915ac7a1c15c86cafd9/artifacts/model -h 0.0.0.0 -p 8001
+    # mlflow models serve --no-conda -m
+    # s3://arts/0/fdbe82916e074915ac7a1c15c86cafd9/artifacts/model -h 0.0.0.0 -p 8001

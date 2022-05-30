@@ -49,7 +49,8 @@ def cli_evaluate(model_path: str, results_path: str, df_test: Tuple[str]) -> Non
     :return:
     """
     evaluate(model_path, results_path, df_test)
-    # python3.8 evaluate.py "../../models/model.clf" "../../reports/figures/results.json"
+    # python3.8 evaluate.py "../../models/model.clf"
+    # "../../reports/figures/results.json"
     # "../../data/processed/x_test.npy" "../../data/processed/y_test.npy"
 
 

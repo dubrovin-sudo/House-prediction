@@ -33,9 +33,8 @@ def get_raw(output_all="data/raw/all_v2.csv") -> None:
         print(df.head(5))
 
 
-
 @click.command()
-@click.argument('output_all', type=click.Path())
+@click.argument("output_all", type=click.Path())
 def cli_get_raw(output_all: str) -> None:
     """
     get_raw for terminal

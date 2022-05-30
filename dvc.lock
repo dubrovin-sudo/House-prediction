@@ -71,8 +71,8 @@ stages:
       md5: 5f0145e334e77e0f0ab6c432b7d7c557
       size: 70323044
     - path: src/models/prepare.py
-      md5: 472b20daf4f3970f937e04863bb83c0d
-      size: 1887
+      md5: 72f7e73f4a266daf1ac17dbe6c56c4df
+      size: 1802
     outs:
     - path: data/processed/x_test.npy
       md5: 724218c8a17163300cc981a04b35ee73
