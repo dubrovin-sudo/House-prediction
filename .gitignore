@@ -8,7 +8,12 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-
+.idea/
+catboost_info/
+requirements.txt
+src/features/test.py
+notebooks/test.ipynb
+*.csv
 # Generated files
 .idea/**/contentModel.xml
 
@@ -246,3 +251,15 @@ cython_debug/
 /.idea/modules.xml
 /.idea/misc.xml
 /.idea/.gitignore
+/.kaggle/
+/.snakemake/
+/src/models/lol.py
+/data/processed/x_test.npy
+/data/processed/x_trainval.npy
+/data/processed/y_test.npy
+/data/processed/y_trainval.npy
+/models/model.clf
+/reports/figures/results.json
+/mydb.sqlite
+/mlruns/
+/Docker/minio/
