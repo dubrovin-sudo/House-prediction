@@ -10,6 +10,10 @@ numpy = "^1.22.3"
 pandas = "^1.4.2"
 mlflow = "^1.25.1"
 dvc = "^2.10.2"
+pycaret = "^2.3.10"
+python-dotenv = "^0.20.0"
+boto3 = "^1.23.7"
+optuna = "^2.10.0"
 
 [tool.poetry.dev-dependencies]
 matplotlib = "^3.5.2"

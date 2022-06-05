@@ -1,92 +1,103 @@
-import json
+import os
+
 import click
 import mlflow
-import numpy as np
-import joblib as jb
-import lightgbm as lgb
+from pycaret.regression import *
+import pandas as pd
+from dotenv import load_dotenv
 
-from typing import Tuple
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import RobustScaler
-from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+load_dotenv()
 
-
+remote_mlflow_server_uri = os.getenv('MLFLOW_TRACKING_URI')
+mlflow.set_tracking_uri(remote_mlflow_server_uri)
+mlflow.set_experiment('init')
 def train(
-        df_train=(
-                '../../data/processed/x_trainval.npy',
-                '../../data/processed/y_trainval.npy',
-        ),
-        df_test=("../../data/processed/x_test.npy",
-                 "../../data/processed/y_test.npy"),
-        model_path="../../models/model.clf",
-        results_path="../../reports/figures/results.json"
+        df_train_path='../../data/processed/df_trainval.csv',
+        # df_test_path="../../data/processed/df_test.npy",
+        # model_path="../../models/model.clf",
+        # results_path="../../reports/figures/results.json"
 ) -> None:
     """
     Function for train model
-    :param df_test:
-    :param results_path:
-    :param df_train:
-    :param model_path:
+    :param df_train_path:
+    :param df_test_path:
     :return:
     """
-    x_trainval = np.load(df_train[0])
-    y_trainval = np.load(df_train[1])
+    df_train = pd.read_csv(df_train_path)
 
-    LGBregressor = lgb.LGBMRegressor
-    pipe = make_pipeline(RobustScaler(), LGBregressor(random_state=42))
-    param_grid = {
-        "lgbmregressor__max_depth": [11],
-        "lgbmregressor__n_estimators": [1000],
-        "lgbmregressor__learning_rate": [0.1],
-        # "lgbmregressor__num_thread": [-1],
-    }
-    params = {k.replace('lgbmregressor__', '') if 'lgbmregressor__' in k else k:v for k,v in param_grid.items()}
-    model = GridSearchCV(pipe, param_grid, cv=5, n_jobs=-1)
-    model.fit(x_trainval, y_trainval)
-    print(params)
+    with mlflow.start_run():
+        reg = setup(data=df_train,
+                    target='price',
+                    categorical_features=['building_type', 'object_type',
+                                          'levels', 'year', 'month', 'subway',
+                                          # 'level',
+                                          ],
+                    # ordinal_features={'rooms':[0,1,2,3,4,5,6,7,8,9]},
+                    high_cardinality_features=['subway'],
+                    train_size=0.75,
 
-    jb.dump(model, model_path)
+                    preprocess=True,
 
-    x_test = np.load(df_test[0])
-    y_test = np.load(df_test[1])
+                    normalize=True,
+                    normalize_method='zscore',
+                    transformation=True,
 
-    y_pred = model.predict(x_test)
-    score = dict(
-        r2=r2_score(y_test, y_pred),
-        mse=mean_squared_error(y_test, y_pred),
-        mae=mean_absolute_error(y_test, y_pred),
-    )
-    mlflow.log_params(params)
-    mlflow.log_artifact(model_path)
-    mlflow.log_metrics(score)
+                    # pca=True,
+                    # pca_components=15,
 
-    print(f'Coefficient of determination of model is {score["r2"]}')
-    print(f'MSE metric of model is {score["mse"]}')
-    print(f'MAE metric of model is {score["mae"]}')
-    json.dump(score, open(results_path, "w"))
+                    remove_outliers=False,
+                    remove_perfect_collinearity=False,
+                    transform_target=True,
 
+                    fold_strategy='kfold',
+                    fold=2,
 
+                    silent=True,
 
-mlflow.set_tracking_uri('http://127.0.0.1:5000')
-mlflow.set_experiment('light_gbm')
+                    log_experiment=True,
+                    session_id=2700,
+                    experiment_name='pycaret_experiments',
+                    log_plots = True,
+                    # log_profile=True,
+                    # profile=True,
+                    )
+
+        lgbm = create_model('lightgbm',
+                            fold=2)
+
+        tuned_lgbm = tune_model(lgbm,
+                                early_stopping=True,
+                                optimize='R2',
+                                search_library='optuna',
+                                fold=2)
+
+        final_lgbm = finalize_model(tuned_lgbm)
+
 
 
 @click.command()
-@click.argument("df_train", type=click.Path(exists=True), nargs=2)
-@click.argument("df_test", type=click.Path(), nargs=2)
-@click.argument("model_path", type=click.Path())
-@click.argument("results_path", type=click.Path())
-def cli_train(df_train: Tuple[str], df_test: Tuple[str], model_path: str, results_path: str) -> None:
+@click.argument("df_train_path", type=click.Path(exists=True), nargs=1)
+# @click.argument("df_test_path", type=click.Path(), nargs=2)
+# @click.argument("model_path", type=click.Path())
+# @click.argument("results_path", type=click.Path())
+def cli_train(df_train_path: str,
+              # df_test_path: str,
+              # model_path: str,
+              # results_path: str
+              ) -> None:
     """
     Function for train model
-    :param results_path:
-    :param df_test:
-    :param model_path:
-    :param df_train:
+    :param df_train_path:
+    # :param df_test:
+    # :param model_path:
+    # :param df_train:
     :return:
     """
-    train(df_train, df_test, model_path, results_path)
+    train(df_train_path,
+          # df_test_path,
+          # model_path,
+          # results_path
+          )
     print('Model saved!')
     # python3.8 train.py '../../models/model.clf' '../../data/processed/x_trainval.npy'
     # '../../data/processed/y_trainval.npy'

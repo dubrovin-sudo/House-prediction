@@ -34,21 +34,21 @@ stages:
       md5: 66bc7d03ac3d7f3015b2d30254c834c2
       size: 27772010
     - path: data/interim/parks_features.csv
-      md5: a58ff0205eba035e203b6f486cad730e
-      size: 12168964
+      md5: ed284305c8e2c4e2c08698bf67390889
+      size: 12139567
     - path: data/interim/raw_features.csv
       md5: c8e71f9e903724093261aa47869cc08e
       size: 12201676
     - path: data/interim/subways_features.csv
-      md5: 46f3b8ca9c604aa7c388228ff6b7de09
-      size: 20368803
+      md5: cdf45b78078d99b791c3d20cab7ab594
+      size: 20387467
     - path: src/features/get_processed.py
       md5: 8e2b4c68712c83f2bcdd37dc3f611b01
       size: 2491
     outs:
     - path: data/processed/df_spb_processed.csv
-      md5: 5f0145e334e77e0f0ab6c432b7d7c557
-      size: 70323044
+      md5: 3661d782b0936c9e40a2a2f30d739887
+      size: 70324485
   select_region:
     cmd: python3 -m src.features.select_region data/raw/all_v2.csv data/raw/df_spb.csv
       2661
@@ -64,28 +64,22 @@ stages:
       md5: 24934a954e81bb0b889e9ee116eab5c4
       size: 34775282
   prepare_datasets:
-    cmd: python3 -m src.models.prepare data/processed/df_spb_processed.csv data/processed/x_trainval.npy
-      data/processed/y_trainval.npy data/processed/x_test.npy data/processed/y_test.npy
+    cmd: python3 -m src.models.prepare data/processed/df_spb_processed.csv data/processed/df_trainval.csv
+      data/processed/df_test.csv
     deps:
     - path: data/processed/df_spb_processed.csv
-      md5: 5f0145e334e77e0f0ab6c432b7d7c557
-      size: 70323044
+      md5: 3661d782b0936c9e40a2a2f30d739887
+      size: 70324485
     - path: src/models/prepare.py
-      md5: 165817bfa4213fb067c0f581b7401e3b
-      size: 1803
+      md5: cd4c5e625886b4565a62ca6b05cd384a
+      size: 1510
     outs:
-    - path: data/processed/x_test.npy
-      md5: 724218c8a17163300cc981a04b35ee73
-      size: 10461184
-    - path: data/processed/x_trainval.npy
-      md5: 7cdc4a95b81a0fa15d189fe9ef9738d6
-      size: 31383296
-    - path: data/processed/y_test.npy
-      md5: 8d86614bda27e38257ce8e1087f610fb
-      size: 653944
-    - path: data/processed/y_trainval.npy
-      md5: 89f8deeb1b81aade8752c025da6871f9
-      size: 1961576
+    - path: data/processed/df_test.csv
+      md5: 6a1a09180ce515ab4238e106bda0a1c5
+      size: 14005518
+    - path: data/processed/df_trainval.csv
+      md5: f66cb13d48a2e1c8d3c80c5fc91fdafb
+      size: 56252852
   get_raw:
     cmd: python3 -m src.data.get_raw data/raw/all_v2.csv
     deps:
@@ -114,15 +108,15 @@ stages:
       size: 1751
     outs:
     - path: data/external/spb_parks.csv
-      md5: f7dba0830cd7b45ed36a3629e02069df
-      size: 10535
+      md5: ca09f91e363f7e19977b09f0682779d1
+      size: 10537
   park_features:
     cmd: python3 -m src.features.park_features data/interim/clean_raw_data.csv data/external/spb_parks.csv
       data/interim/parks_features.csv
     deps:
     - path: data/external/spb_parks.csv
-      md5: f7dba0830cd7b45ed36a3629e02069df
-      size: 10535
+      md5: ca09f91e363f7e19977b09f0682779d1
+      size: 10537
     - path: data/interim/clean_raw_data.csv
       md5: 66bc7d03ac3d7f3015b2d30254c834c2
       size: 27772010
@@ -131,8 +125,8 @@ stages:
       size: 2421
     outs:
     - path: data/interim/parks_features.csv
-      md5: a58ff0205eba035e203b6f486cad730e
-      size: 12168964
+      md5: ed284305c8e2c4e2c08698bf67390889
+      size: 12139567
   subway_features:
     cmd: python3 -m src.features.subway_features data/interim/clean_raw_data.csv data/external/spb_subways.csv
       data/interim/subways_features.csv
@@ -148,28 +142,17 @@ stages:
       size: 2531
     outs:
     - path: data/interim/subways_features.csv
-      md5: 46f3b8ca9c604aa7c388228ff6b7de09
-      size: 20368803
+      md5: cdf45b78078d99b791c3d20cab7ab594
+      size: 20387467
   train:
-    cmd: python3 -m src.models.train data/processed/x_trainval.npy data/processed/y_trainval.npy
-      data/processed/x_test.npy data/processed/y_test.npy models/model.clf reports/figures/results.json
+    cmd: python3 -m src.models.train data/processed/df_trainval.csv
     deps:
-    - path: data/processed/x_trainval.npy
-      md5: 7cdc4a95b81a0fa15d189fe9ef9738d6
-      size: 31383296
-    - path: data/processed/y_trainval.npy
-      md5: 89f8deeb1b81aade8752c025da6871f9
-      size: 1961576
+    - path: data/processed/df_trainval.csv
+      md5: f66cb13d48a2e1c8d3c80c5fc91fdafb
+      size: 56252852
     - path: src/models/train.py
-      md5: 55021d1d5519fe4c77f2ebe8004e6633
-      size: 3048
-    outs:
-    - path: models/model.clf
-      md5: dbb1ba783616551a484dcaa6d70f648e
-      size: 2861684
-    - path: reports/figures/results.json
-      md5: da4af2ae6f181cde385926090d0f5b47
-      size: 79
+      md5: 70893ddd90a1fc74434c98c2a30e2702
+      size: 3327
   evaluate:
     cmd: python3 -m src.models.evaluate models/model.clf reports/figures/results.json
       data/processed/x_test.npy data/processed/y_test.npy

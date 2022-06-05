@@ -9,10 +9,8 @@ from sklearn.model_selection import train_test_split
 def prepare_data(
         df_processed='../../data/processed/df_spb_processed.csv',
         df_prepared=(
-                '../../data/processed/x_trainval.npy',
-                '../../data/processed/y_trainval.npy',
-                '../../data/processed/x_test.npy',
-                '../../data/processed/y_test.npy'
+                '../../data/processed/df_trainval.csv',
+                '../../data/processed/df_test.csv'
         ),
 ) -> None:
     """
@@ -23,25 +21,18 @@ def prepare_data(
     """
 
     df = pd.read_csv(df_processed)
-    df = df.select_dtypes(exclude=['object'])
-    df = df.drop_duplicates(subset=['geo_lat', 'geo_lon', 'area', 'level'], keep='last')
+    # df = df.drop_duplicates(subset=['geo_lat', 'geo_lon', 'area', 'level'], keep='last')
 
-    x_full = df.drop(['price'], axis=1).values
-    y_full = df['price'].values
-
-    x_trainval, x_test, y_trainval, y_test = train_test_split(
-        x_full, y_full, random_state=42
-    )
-    # save to npy file
-    np.save(df_prepared[0], x_trainval)
-    np.save(df_prepared[1], y_trainval)
-    np.save(df_prepared[2], x_test)
-    np.save(df_prepared[3], y_test)
+    df_train = df.sample(frac=0.8, random_state=2707, ignore_index=True)
+    df_test = df.drop(df_train.index)
+    # save
+    df_train.to_csv(df_prepared[0], index=False)
+    df_test.to_csv(df_prepared[1], index=False)
 
 
 @click.command()
 @click.argument('df_processed', type=click.Path(exists=True))
-@click.argument('df_prepared', type=click.Path(), nargs=4)
+@click.argument('df_prepared', type=click.Path(), nargs=2)
 def cli_prepare_data(df_processed: str, df_prepared: Tuple[str]) -> None:
     """
     Function for preparing data

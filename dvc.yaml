@@ -74,25 +74,20 @@ stages:
         - data/processed/df_spb_processed.csv
 
     prepare_datasets:
-      cmd: python3 -m src.models.prepare data/processed/df_spb_processed.csv data/processed/x_trainval.npy data/processed/y_trainval.npy data/processed/x_test.npy data/processed/y_test.npy
+      cmd: python3 -m src.models.prepare data/processed/df_spb_processed.csv data/processed/df_trainval.csv data/processed/df_test.csv
       deps:
         - src/models/prepare.py
         - data/processed/df_spb_processed.csv
       outs:
-        - data/processed/x_trainval.npy
-        - data/processed/y_trainval.npy
-        - data/processed/x_test.npy
-        - data/processed/y_test.npy
+        - data/processed/df_trainval.csv
+        - data/processed/df_test.csv
 
     train:
-      cmd: python3 -m src.models.train data/processed/x_trainval.npy data/processed/y_trainval.npy data/processed/x_test.npy data/processed/y_test.npy models/model.clf reports/figures/results.json
+      cmd: python3 -m src.models.train data/processed/df_trainval.csv
       deps:
         - src/models/train.py
-        - data/processed/x_trainval.npy
-        - data/processed/y_trainval.npy
-      outs:
-        - models/model.clf
-        - reports/figures/results.json
+        - data/processed/df_trainval.csv
+
 
 #    evaluate:
 #      cmd: python3 -m src.models.evaluate models/model.clf reports/figures/results.json data/processed/x_test.npy data/processed/y_test.npy
