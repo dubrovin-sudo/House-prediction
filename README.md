@@ -68,8 +68,15 @@ Submissions are evaluated on [Root-Mean-Squared-Error (RMSE)](https://en.wikiped
 We are testing MLOps approaches to predict houses' prices in Saint-Petersburg:
 
 - Lint Flake8;
-- Snakemake;
+- Pytest;
 - DVC;
 - Docker;
 - MLFlow;
+- LightGBM;
 - CI/CD Github
+
+## Pipeline
+![](reports/figures/Pipeline.png)
+
+
+
